@@ -17,10 +17,15 @@ const GetLatestBlock = () => {
       try {
         // TODO: Make a GET request to http://localhost:3005/getLatestBlock
         // and store the result in the latestBlock state
+        const response = axios.get("http://localhost:3005/getLatestBlock");
+        setLatestBlock(response.data);
       } catch (err) {
         // TODO: If request fails, set an appropriate error message
+        console.error("ERROR: failed to the latest block: ", err);
+        setError("failed to get the latest block");
       } finally {
         // TODO: Whether success or failure, stop the loading spinner
+        setLoading(false);
       }
     };
 
@@ -50,14 +55,14 @@ const GetLatestBlock = () => {
           {/* Block Index */}
           <div className="mb-3">
             <p className="text-sm font-semibold text-gray-700">
-              <span className="text-blue-600">Block Index:</span> {/* block index */}
+              <span className="text-blue-600">Block Index:</span> {latestBlock.index}
             </p>
           </div>
 
           {/* Timestamp */}
           <div className="mb-3">
             <p className="text-sm font-semibold text-gray-700">
-              <span className="text-blue-600">Block Timestamp:</span>{" "}
+              <span className="text-blue-600">Block Timestamp:</span>{new Date(parseInt(latestBlock.timestamp)).toLocaleString()}
               {/* TODO: Convert latestBlock.timestamp to a readable string */}
             </p>
           </div>
@@ -68,7 +73,7 @@ const GetLatestBlock = () => {
               <span className="text-blue-600">Previous Hash:</span>
             </p>
             {/* TODO: Show previous hash */}
-            <p className="text-xs font-mono text-gray-600 break-all">{/* prevHash */}</p>
+            <p className="text-xs font-mono text-gray-600 break-all">{latestBlock.prevHash}</p>
           </div>
 
           {/* Current Hash */}
@@ -77,7 +82,7 @@ const GetLatestBlock = () => {
               <span className="text-blue-600">Hash:</span>
             </p>
             {/* TODO: Show current hash */}
-            <p className="text-xs font-mono text-gray-600 break-all">{/* hash */}</p>
+            <p className="text-xs font-mono text-gray-600 break-all">{latestBlock.hash}</p>
           </div>
 
           {/* Block Data */}
@@ -87,7 +92,7 @@ const GetLatestBlock = () => {
             </p>
             {/* TODO: Show data inside a styled container */}
             <p className="text-xs text-gray-800 bg-blue-100 p-2 rounded-md break-all">
-              {/* block data */}
+              {latestBlock.data}
             </p>
           </div>
         </div>
