@@ -6,7 +6,7 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 
-const port = process.env.port || 3005;
+const port = process.env.PORT || 3005;
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
@@ -24,21 +24,9 @@ app.get('/', (req, res) => {
 app.post('/addBlock', (req, res) => {
     const { data } = req.body;
 
-    // TODO: Check if 'data' is provided in the request body
-    // If not, respond with status 400 and an error message
     if(!data){
-        res.status(400).json({error: "'data' field is empty and is required" })
+        return res.status(400).json({error: "'data' field is empty and is required" });
     }
-    // TODO:
-    // 1. Create a new Block using:
-    //    - index = latest block index + 1
-    //    - timestamp = current time
-    //    - data = from request
-    //    - prevHash = hash of the latest block
-    //
-    // 2. Add the new block to the chain using chain.addBlock()
-    //
-    // 3. Respond with status 200 and a message + the new block's data
 
     let latestBlock = chain.getLatestBlock();
     let newIndex = latestBlock.index + 1;
@@ -53,20 +41,23 @@ app.post('/addBlock', (req, res) => {
     });
 });
 
-// Route to get the entire blockchain
 app.get('/getChain', (req, res) => {
-    // TODO: Respond with the full chain (chain.chain)
     res.status(200).json(chain.chain);
 });
 
 // Route to get the latest block in the chain
 app.get('/getLatestBlock', (req, res) => {
     // TODO: Respond with the result of chain.getLatestBlock()
-    res.status(200).json(chain.getLatestBlock());
+    try{
+        res.status(200).json(chain.getLatestBlock());
+    } catch (err) {
+        console.error("ERROR: error in /getLatestBlock: ", err);
+        res.status(500).json({error: "internal server error"});
+    }
 });
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
     // TODO: Log a message saying the blockchain API is running and on which port
-    console.log(`Blockchain API is running on https://localhost:${port}`);
+    console.log(`Blockchain API is running on http://localhost:${port}`);
 });

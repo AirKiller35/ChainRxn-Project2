@@ -17,7 +17,7 @@ const GetLatestBlock = () => {
       try {
         // TODO: Make a GET request to http://localhost:3005/getLatestBlock
         // and store the result in the latestBlock state
-        const response = axios.get("http://localhost:3005/getLatestBlock");
+        const response = await axios.get("http://localhost:3005/getLatestBlock");
         setLatestBlock(response.data);
       } catch (err) {
         // TODO: If request fails, set an appropriate error message
